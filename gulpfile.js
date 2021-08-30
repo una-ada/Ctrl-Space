@@ -1,6 +1,7 @@
 /*----- IMPORTS --------------------------------------------------------------*/
 const { dest, series, src, watch } = require('gulp'),
   concat = require('gulp-concat'),
+  minify = require('gulp-clean-css'),
   uglify = require('gulp-uglify'),
   web = require('gulp-webserver'),
   /*----- CONSTANTS ----------------------------------------------------------*/
@@ -17,12 +18,13 @@ const { dest, series, src, watch } = require('gulp'),
 
 /*----- TASKS ----------------------------------------------------------------*/
 const build = {
-    css: _ => {},
+    css: _ =>
+      src(source.css).pipe(concat(css)).pipe(minify()).pipe(dest(buildPath)),
     html: _ => {},
     js: _ =>
       src(source.js).pipe(concat(js)).pipe(uglify()).pipe(dest(buildPath)),
   },
-  buildAll = series(build.js),
+  buildAll = series(build.js, build.css),
   serve = _ =>
     src('./src').pipe(
       web({
