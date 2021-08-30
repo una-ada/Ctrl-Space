@@ -55,6 +55,7 @@ const build = {
       watch(source.html, series(build.html, build.zip));
     }
 
+/*----- EXPORTS --------------------------------------------------------------*/
 module.exports = {
   serve,
   build: buildAll,
