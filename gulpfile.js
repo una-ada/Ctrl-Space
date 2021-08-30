@@ -48,10 +48,16 @@ const build = {
         directoryListing: false,
         open: true,
       })
-    );
+    ),
+    watchSrc = _ => {
+      watch(source.css, series(build.css, build.zip));
+      watch(source.js, series(build.js, build.zip));
+      watch(source.html, series(build.html, build.zip));
+    }
 
 module.exports = {
   serve,
   build: buildAll,
-  default: series(buildAll, serve),
+  watch: watchSrc,
+  default: series(buildAll, serve, watchSrc),
 };
