@@ -1,11 +1,13 @@
 /*----- IMPORTS --------------------------------------------------------------*/
 const { dest, series, src, watch } = require('gulp'),
+  check = require('gulp-check-filesize'),
   concat = require('gulp-concat'),
   htmlmin = require('gulp-htmlmin'),
   minify = require('gulp-clean-css'),
   replace = require('gulp-html-replace'),
   uglify = require('gulp-uglify'),
   web = require('gulp-webserver'),
+  zip = require('gulp-zip'),
   /*----- CONSTANTS ----------------------------------------------------------*/
   buildPath = '_build',
   css = 'game.min.css',
@@ -29,8 +31,13 @@ const build = {
         .pipe(dest(buildPath)),
     js: _ =>
       src(source.js).pipe(concat(js)).pipe(uglify()).pipe(dest(buildPath)),
+    zip: _ =>
+      src('./_build/*')
+        .pipe(zip('game.zip'))
+        .pipe(dest('./_dist'))
+        .pipe(check({ fileSizeLimit: 16384 })),
   },
-  buildAll = series(build.js, build.css, build.html),
+  buildAll = series(build.js, build.css, build.html, build.zip),
   serve = _ =>
     src('./src').pipe(
       web({
