@@ -1,9 +1,10 @@
 /*----- IMPORTS --------------------------------------------------------------*/
 const { dest, series, src, watch } = require('gulp'),
-  web = require('gulp-webserver');
-
-/*----- CONSTANTS ------------------------------------------------------------*/
-const buildPath = '_build',
+  concat = require('gulp-concat'),
+  uglify = require('gulp-uglify'),
+  web = require('gulp-webserver'),
+  /*----- CONSTANTS ----------------------------------------------------------*/
+  buildPath = '_build',
   css = 'game.min.css',
   host = 'localhost',
   js = 'game.min.js',
@@ -17,9 +18,11 @@ const buildPath = '_build',
 /*----- TASKS ----------------------------------------------------------------*/
 const build = {
     css: _ => {},
-    html: _ > {},
-    js: _ => {},
+    html: _ => {},
+    js: _ =>
+      src(source.js).pipe(concat(js)).pipe(uglify()).pipe(dest(buildPath)),
   },
+  buildAll = series(build.js),
   serve = _ =>
     src('./src').pipe(
       web({
@@ -34,5 +37,6 @@ const build = {
 
 module.exports = {
   serve,
-  default: series(serve),
+  build: buildAll,
+  default: series(buildAll, serve),
 };
