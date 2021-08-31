@@ -27,7 +27,7 @@ const build = {
     html: _ =>
       src(source.html)
         .pipe(replace({ css, js }))
-        .pipe(htmlmin())
+        .pipe(htmlmin({ collapseWhitespace: true }))
         .pipe(dest(buildPath)),
     js: _ =>
       src(source.js).pipe(concat(js)).pipe(uglify()).pipe(dest(buildPath)),
@@ -49,11 +49,11 @@ const build = {
         open: true,
       })
     ),
-    watchSrc = _ => {
-      watch(source.css, series(build.css, build.zip));
-      watch(source.js, series(build.js, build.zip));
-      watch(source.html, series(build.html, build.zip));
-    }
+  watchSrc = _ => {
+    watch(source.css, series(build.css, build.zip));
+    watch(source.js, series(build.js, build.zip));
+    watch(source.html, series(build.html, build.zip));
+  };
 
 /*----- EXPORTS --------------------------------------------------------------*/
 module.exports = {
