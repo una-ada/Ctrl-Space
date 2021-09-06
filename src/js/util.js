@@ -9,4 +9,4 @@ $.util = {
 window.requestAnimFrame = (_ =>
   requestAnimationFrame ||
   mozRequestAnimationFrame ||
-  (next => window.setTimeout(next, 1e3 / 60)))();
+  (next => setTimeout(next, 1e3 / 60)))();
